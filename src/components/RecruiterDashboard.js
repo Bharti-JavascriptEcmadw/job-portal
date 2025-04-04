@@ -1,213 +1,173 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Importing useNavigate
 
-const HiringManagerDashboard = () => {
-  // Dummy data for job postings and applicants (in a real-world scenario, this will be fetched from an API)
-  const jobs = [
+const RecruiterDashboard = () => {
+    const navigate = useNavigate();
+
+  // Dummy data for candidates (in real-world, this data will be fetched from an API)
+  const candidates = [
     {
       id: 1,
-      title: "Software Engineer",
-      company: "Tech Solutions",
-      location: "San Francisco, CA",
-      applicants: 5,
-      skills: "React, Node.js, JavaScript",
-      postedDate: "2 days ago",
+      name: "John Doe",
+      position: "Software Engineer",
+      location: "New York, NY",
+      skills: "JavaScript, React, Node.js",
+      experience: "3 years",
+      profile: "https://randomuser.me/api/portraits/men/1.jpg",
     },
     {
       id: 2,
-      title: "Product Manager",
-      company: "Innovate Corp.",
-      location: "New York, NY",
-      applicants: 3,
+      name: "Jane Smith",
+      position: "Product Manager",
+      location: "San Francisco, CA",
       skills: "Agile, Product Strategy, Leadership",
-      postedDate: "1 week ago",
+      experience: "5 years",
+      profile: "https://randomuser.me/api/portraits/women/1.jpg",
     },
     {
       id: 3,
-      title: "UX/UI Designer",
-      company: "Design Innovators",
+      name: "Alice Johnson",
+      position: "UX/UI Designer",
       location: "Remote",
-      applicants: 7,
-      skills: "Figma, UX Research, Design Systems",
-      postedDate: "1 month ago",
+      skills: "Figma, UX Research, Prototyping",
+      experience: "4 years",
+      profile: "https://randomuser.me/api/portraits/women/2.jpg",
     },
   ];
 
-  const [selectedJob, setSelectedJob] = useState(null);
-  const [showPostJobModal, setShowPostJobModal] = useState(false);
+  // State for search and selected candidate
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
 
-  // Handle job selection for viewing applicants
-  const handleSelectJob = (job) => {
-    setSelectedJob(job);
+  // Use navigate to redirect on logout
+
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
   };
 
-  // Handle opening and closing of the "Post Job" modal
-  const handlePostJobModal = () => {
-    setShowPostJobModal(!showPostJobModal);
+  // Handle candidate selection
+  const handleSelectCandidate = (candidate) => {
+    setSelectedCandidate(candidate);
+  };
+
+  // Filter candidates based on search term
+  const filteredCandidates = candidates.filter((candidate) =>
+    candidate.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Logout function to navigate to login page
+  const handleLogout = () => {
+    alert("Logout")
+    // Perform any necessary cleanup here (like removing tokens from local storage, etc.)
+    navigate("/"); // Navigate to the login page
   };
 
   return (
-    <div className="bg-gradient-to-r from-green-600 to-teal-600 min-h-screen text-white">
-      <div className="max-w-7xl mx-auto p-8">
-        {/* Header */}
-        <h1 className="text-4xl font-extrabold text-center text-white mb-10">
-          Hiring Manager Dashboard
-        </h1>
+    <div className="bg-green-300 min-h-screen text-white flex">
+      {/* Sidebar */}
+      <div className="w-1/4 bg-gray-900 p-6">
+        <h1 className="text-3xl font-extrabold text-center text-white mb-8">Recruiter Dashboard</h1>
 
-        {/* Profile Summary */}
-        <div className="bg-white text-gray-800 p-6 rounded-lg shadow-lg mb-8">
-          <div className="flex items-center">
-            <img
-              src="https://randomuser.me/api/portraits/men/1.jpg"
-              alt="Profile"
-              className="w-16 h-16 rounded-full mr-4"
-            />
-            <div>
-              <h2 className="text-xl font-semibold">John Doe</h2>
-              <p className="text-gray-600">Hiring Manager at Tech Solutions</p>
-              <p className="text-gray-400">San Francisco, CA</p>
-            </div>
-          </div>
+        {/* Search Bar */}
+        <div className="mb-8">
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            placeholder="Search candidates by name"
+            className="w-full p-4 rounded-lg shadow-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
         </div>
 
-        {/* Job Postings Section */}
-        <div className="bg-white text-gray-800 p-8 rounded-lg shadow-xl mb-8">
-          <h2 className="text-2xl font-semibold mb-6">Job Postings</h2>
+        {/* Action Buttons */}
+        <div className="mt-10">
+          <button className="bg-blue-500 w-full text-white p-3 rounded-lg mb-4 hover:bg-blue-600 transition duration-300 ease-in-out">
+            Post Job
+          </button>
+          <button className="bg-green-500 w-full text-white p-3 rounded-lg hover:bg-green-600 transition duration-300 ease-in-out">
+            Conduct Interview
+          </button>
+        </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {jobs.map((job) => (
-              <div
-                key={job.id}
-                className="bg-white text-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg cursor-pointer transition duration-300 ease-in-out"
-                onClick={() => handleSelectJob(job)}
-              >
-                <h3 className="text-xl font-semibold text-teal-600 mb-2">{job.title}</h3>
-                <p className="text-gray-500">{job.company}</p>
-                <p className="text-gray-400">{job.location}</p>
-                <p className="text-gray-600 mt-2">{job.skills}</p>
-                <p className="text-gray-500 mt-2">
-                  Posted {job.postedDate} | {job.applicants} Applicants
-                </p>
-              </div>
-            ))}
-          </div>
+        {/* Logout Button */}
+        <div className="mt-10">
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 w-full text-white p-3 rounded-lg hover:bg-red-600 transition duration-300 ease-in-out"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
 
-          {/* Button to Post a Job */}
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={handlePostJobModal}
-              className="bg-green-500 text-white p-3 rounded-lg shadow-lg hover:bg-green-600 transition duration-300 ease-in-out"
+      {/* Main Content */}
+      <div className="w-3/4 p-8 overflow-y-auto">
+        {/* Candidate Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredCandidates.map((candidate) => (
+            <div
+              key={candidate.id}
+              className="bg-white text-gray-800 p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 ease-in-out cursor-pointer"
+              onClick={() => handleSelectCandidate(candidate)}
             >
-              Post a Job
-            </button>
-          </div>
+              <div className="flex flex-col items-center text-center">
+                <img
+                  src={candidate.profile}
+                  alt={candidate.name}
+                  className="w-24 h-24 rounded-full mb-4"
+                />
+                <h3 className="text-xl font-semibold text-indigo-600 mb-2">
+                  {candidate.name}
+                </h3>
+                <p className="text-gray-500">{candidate.position}</p>
+                <p className="text-gray-400">{candidate.location}</p>
+                <p className="text-gray-600 mt-2">{candidate.skills}</p>
+                <p className="text-gray-500 mt-1">{candidate.experience}</p>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* View Applicants Modal */}
-        {selectedJob && (
+        {/* Candidate Details Modal */}
+        {selectedCandidate && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
+            <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
               <h2 className="text-2xl font-semibold mb-4 text-center">
-                Applicants for {selectedJob.title}
+                Candidate Details: {selectedCandidate.name}
               </h2>
-              <div className="mb-4">
-                <ul>
-                  <li className="flex justify-between items-center mb-4">
-                    <div className="flex items-center">
-                      <img
-                        src="https://randomuser.me/api/portraits/men/1.jpg"
-                        alt="Applicant"
-                        className="w-10 h-10 rounded-full mr-4"
-                      />
-                      <div>
-                        <p className="text-lg font-semibold">Jane Smith</p>
-                        <p className="text-gray-500">Software Engineer</p>
-                      </div>
-                    </div>
-                    <button className="bg-blue-500 text-white p-2 rounded-lg">View Profile</button>
-                  </li>
-                  <li className="flex justify-between items-center mb-4">
-                    <div className="flex items-center">
-                      <img
-                        src="https://randomuser.me/api/portraits/women/1.jpg"
-                        alt="Applicant"
-                        className="w-10 h-10 rounded-full mr-4"
-                      />
-                      <div>
-                        <p className="text-lg font-semibold">Alice Johnson</p>
-                        <p className="text-gray-500">Product Manager</p>
-                      </div>
-                    </div>
-                    <button className="bg-blue-500 text-white p-2 rounded-lg">View Profile</button>
-                  </li>
-                </ul>
+              <div className="flex justify-center mb-4">
+                <img
+                  src={selectedCandidate.profile}
+                  alt={selectedCandidate.name}
+                  className="w-32 h-32 rounded-full"
+                />
               </div>
+              <p className="text-center text-gray-600 mb-2">
+                <strong>Position:</strong> {selectedCandidate.position}
+              </p>
+              <p className="text-center text-gray-600 mb-2">
+                <strong>Location:</strong> {selectedCandidate.location}
+              </p>
+              <p className="text-center text-gray-600 mb-2">
+                <strong>Skills:</strong> {selectedCandidate.skills}
+              </p>
+              <p className="text-center text-gray-600 mb-4">
+                <strong>Experience:</strong> {selectedCandidate.experience}
+              </p>
 
-              <div className="flex justify-center">
+              {/* Modal Actions */}
+              <div className="flex justify-between gap-4">
                 <button
-                  onClick={() => setSelectedJob(null)}
-                  className="bg-gray-500 text-white p-3 rounded-lg hover:bg-gray-600 transition duration-300 ease-in-out"
+                  onClick={() => setSelectedCandidate(null)}
+                  className="bg-gray-500 text-white p-2 rounded-md w-full"
                 >
                   Close
                 </button>
+                <button className="bg-blue-500 text-white p-2 rounded-md w-full">
+                  Invite to Interview
+                </button>
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* Post Job Modal */}
-        {showPostJobModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-            <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
-              <h2 className="text-2xl font-semibold mb-4 text-center">Post a New Job</h2>
-              <form>
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">Job Title</label>
-                  <input
-                    type="text"
-                    placeholder="Enter job title"
-                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm"
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">Company</label>
-                  <input
-                    type="text"
-                    placeholder="Enter company name"
-                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm"
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <label className="block text-sm font-medium mb-2">Location</label>
-                  <input
-                    type="text"
-                    placeholder="Enter job location"
-                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm"
-                  />
-                </div>
-
-                <div className="mb-6">
-                  <label className="block text-sm font-medium mb-2">Job Description</label>
-                  <textarea
-                    rows="5"
-                    placeholder="Enter job description"
-                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm"
-                  />
-                </div>
-
-                <div className="flex justify-center gap-4">
-                  <button
-                    onClick={handlePostJobModal}
-                    className="bg-gray-500 text-white p-3 rounded-lg hover:bg-gray-600 transition duration-300 ease-in-out"
-                  >
-                    Close
-                  </button>
-                  <button className="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition duration-300 ease-in-out">
-                    Post Job
-                  </button>
-                </div>
-              </form>
             </div>
           </div>
         )}
@@ -216,4 +176,4 @@ const HiringManagerDashboard = () => {
   );
 };
 
-export default HiringManagerDashboard;
+export default RecruiterDashboard;

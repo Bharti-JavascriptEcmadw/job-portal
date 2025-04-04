@@ -1,175 +1,235 @@
 import React, { useState } from "react";
-import { FaPen, FaBriefcase, FaChartLine, FaHistory, FaUsers, FaClipboardList } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";  // Import useNavigate from react-router-dom
 
 const HiringManagerDashboard = () => {
-  // State to manage modal visibility
-  const [isPostJobModalOpen, setPostJobModalOpen] = useState(false);
-  const [isViewApplicationsModalOpen, setViewApplicationsModalOpen] = useState(false);
+    const navigate = useNavigate();
   
-  // Dummy application data for the View Applications modal
-  const applications = [
-    { id: 1, name: "John Doe", position: "Frontend Developer", status: "Under Review" },
-    { id: 2, name: "Jane Smith", position: "Backend Developer", status: "Interview Scheduled" },
-    { id: 3, name: "David Lee", position: "Full Stack Developer", status: "Rejected" },
+  // Dummy data for job postings and applicants (in a real-world scenario, this will be fetched from an API)
+  const jobs = [
+    {
+      id: 1,
+      title: "Software Engineer",
+      company: "Tech Solutions",
+      location: "San Francisco, CA",
+      applicants: 5,
+      skills: "React, Node.js, JavaScript",
+      postedDate: "2 days ago",
+    },
+    {
+      id: 2,
+      title: "Product Manager",
+      company: "Innovate Corp.",
+      location: "New York, NY",
+      applicants: 3,
+      skills: "Agile, Product Strategy, Leadership",
+      postedDate: "1 week ago",
+    },
+    {
+      id: 3,
+      title: "UX/UI Designer",
+      company: "Design Innovators",
+      location: "Remote",
+      applicants: 7,
+      skills: "Figma, UX Research, Design Systems",
+      postedDate: "1 month ago",
+    },
   ];
 
-  // Toggle modal visibility
-  const togglePostJobModal = () => setPostJobModalOpen(!isPostJobModalOpen);
-  const toggleViewApplicationsModal = () => setViewApplicationsModalOpen(!isViewApplicationsModalOpen);
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [showPostJobModal, setShowPostJobModal] = useState(false);
+
+  // Handle job selection for viewing applicants
+  const handleSelectJob = (job) => {
+    setSelectedJob(job);
+  };
+
+  // Handle opening and closing of the "Post Job" modal
+  const handlePostJobModal = () => {
+    setShowPostJobModal(!showPostJobModal);
+  };
+
+  const handleLogout = () => {
+    alert("Logged out successfully!");
+    navigate("/"); // Navigate to login page
+  };
 
   return (
-    <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 min-h-screen text-white">
+    <div className="bg-gradient-to-r from-green-600 to-teal-600 min-h-screen text-white">
       <div className="max-w-7xl mx-auto p-8">
         {/* Header */}
-        <h1 className="text-4xl font-extrabold text-center mb-8">Hiring Manager Dashboard</h1>
+        <div className="flex justify-between items-center mb-10">
+          <h1 className="text-4xl font-extrabold text-center text-white">
+            Hiring Manager Dashboard
+          </h1>
+          
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white p-3 rounded-lg shadow-lg hover:bg-red-600 transition duration-300 ease-in-out"
+          >
+            Logout
+          </button>
+        </div>
 
-        {/* Dashboard Container */}
-        <div className="bg-white text-gray-800 p-8 rounded-lg shadow-xl">
-          <h2 className="text-3xl font-semibold text-center mb-6">
-            Manage Job Posts, Candidates, and Track Analytics
-          </h2>
-          <p className="text-center text-gray-600 mb-8">
-            Manage all your job postings, candidates, and track analytics to make informed decisions.
-          </p>
-
-          {/* Action Cards Section */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Post a Job Card */}
-            <div className="bg-blue-600 hover:bg-blue-700 text-white p-6 rounded-lg shadow-lg text-center transition duration-300 ease-in-out">
-              <FaPen className="text-4xl mb-4 mx-auto" />
-              <h3 className="text-xl font-medium mb-4">Post a New Job</h3>
-              <p className="text-gray-200 mb-4">
-                Create a new job post to find the perfect candidates for your team.
-              </p>
-              <button className="bg-white text-blue-600 p-2 rounded-lg shadow-md hover:bg-blue-200" onClick={togglePostJobModal}>
-                Post a Job
-              </button>
-            </div>
-
-            {/* View Applications Card */}
-            <div className="bg-green-600 hover:bg-green-700 text-white p-6 rounded-lg shadow-lg text-center transition duration-300 ease-in-out">
-              <FaUsers className="text-4xl mb-4 mx-auto" />
-              <h3 className="text-xl font-medium mb-4">View Applications</h3>
-              <p className="text-gray-200 mb-4">
-                Track and review applications from job seekers interested in your posts.
-              </p>
-              <button className="bg-white text-green-600 p-2 rounded-lg shadow-md hover:bg-green-200" onClick={toggleViewApplicationsModal}>
-                View Applications
-              </button>
-            </div>
-
-            {/* Manage Candidates Card */}
-            <div className="bg-purple-600 hover:bg-purple-700 text-white p-6 rounded-lg shadow-lg text-center transition duration-300 ease-in-out">
-              <FaUsers className="text-4xl mb-4 mx-auto" />
-              <h3 className="text-xl font-medium mb-4">Manage Candidates</h3>
-              <p className="text-gray-200 mb-4">
-                Evaluate, shortlist, and manage candidates for the roles you've posted.
-              </p>
-              <button className="bg-white text-purple-600 p-2 rounded-lg shadow-md hover:bg-purple-200">
-                Manage Candidates
-              </button>
-            </div>
-
-            {/* Job Analytics Card */}
-            <div className="bg-indigo-600 hover:bg-indigo-700 text-white p-6 rounded-lg shadow-lg text-center transition duration-300 ease-in-out">
-              <FaChartLine className="text-4xl mb-4 mx-auto" />
-              <h3 className="text-xl font-medium mb-4">Job Analytics</h3>
-              <p className="text-gray-200 mb-4">
-                View data insights about your job posts, including applicants, views, and engagement.
-              </p>
-              <button className="bg-white text-indigo-600 p-2 rounded-lg shadow-md hover:bg-indigo-200">
-                View Analytics
-              </button>
-            </div>
-
-            {/* Job Post History Card */}
-            <div className="bg-teal-600 hover:bg-teal-700 text-white p-6 rounded-lg shadow-lg text-center transition duration-300 ease-in-out">
-              <FaHistory className="text-4xl mb-4 mx-auto" />
-              <h3 className="text-xl font-medium mb-4">Job Post History</h3>
-              <p className="text-gray-200 mb-4">
-                Revisit your previous job posts and track the progress of applicants.
-              </p>
-              <button className="bg-white text-teal-600 p-2 rounded-lg shadow-md hover:bg-teal-200">
-                View History
-              </button>
-            </div>
-
-            {/* Manage Job Post Settings Card */}
-            <div className="bg-yellow-600 hover:bg-yellow-700 text-white p-6 rounded-lg shadow-lg text-center transition duration-300 ease-in-out">
-              <FaBriefcase className="text-4xl mb-4 mx-auto" />
-              <h3 className="text-xl font-medium mb-4">Manage Post Settings</h3>
-              <p className="text-gray-200 mb-4">
-                Adjust your job post settings and customize what applicants will see.
-              </p>
-              <button className="bg-white text-yellow-600 p-2 rounded-lg shadow-md hover:bg-yellow-200">
-                Manage Settings
-              </button>
-            </div>
-
-            {/* View Applicants for Job Card */}
-            <div className="bg-red-600 hover:bg-red-700 text-white p-6 rounded-lg shadow-lg text-center transition duration-300 ease-in-out">
-              <FaClipboardList className="text-4xl mb-4 mx-auto" />
-              <h3 className="text-xl font-medium mb-4">View Applicants</h3>
-              <p className="text-gray-200 mb-4">
-                View all the applicants for your job postings and evaluate them.
-              </p>
-              <button className="bg-white text-red-600 p-2 rounded-lg shadow-md hover:bg-red-200">
-                View Applicants
-              </button>
+        {/* Profile Summary */}
+        <div className="bg-white text-gray-800 p-6 rounded-lg shadow-lg mb-8">
+          <div className="flex items-center">
+            <img
+              src="https://randomuser.me/api/portraits/men/1.jpg"
+              alt="Profile"
+              className="w-16 h-16 rounded-full mr-4"
+            />
+            <div>
+              <h2 className="text-xl font-semibold">John Doe</h2>
+              <p className="text-gray-600">Hiring Manager at Tech Solutions</p>
+              <p className="text-gray-400">San Francisco, CA</p>
             </div>
           </div>
         </div>
+
+        {/* Job Postings Section */}
+        <div className="bg-white text-gray-800 p-8 rounded-lg shadow-xl mb-8">
+          <h2 className="text-2xl font-semibold mb-6">Job Postings</h2>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {jobs.map((job) => (
+              <div
+                key={job.id}
+                className="bg-red-200 text-black p-6 rounded-lg shadow-md hover:shadow-lg cursor-pointer transition duration-300 ease-in-out"
+                onClick={() => handleSelectJob(job)}
+              >
+                <h3 className="text-xl font-semibold text-teal-600 mb-2">{job.title}</h3>
+                <p className="text-black">{job.company}</p>
+                <p className="text-black">{job.location}</p>
+                <p className="text-black mt-2">{job.skills}</p>
+                <p className="text-black mt-2">
+                  Posted {job.postedDate} | {job.applicants} Applicants
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Button to Post a Job */}
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={handlePostJobModal}
+              className="bg-green-500 text-white p-3 rounded-lg shadow-lg hover:bg-green-600 transition duration-300 ease-in-out"
+            >
+              Post a Job
+            </button>
+          </div>
+        </div>
+
+        {/* View Applicants Modal */}
+        {selectedJob && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+            <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
+              <h2 className="text-2xl font-semibold mb-4 text-center">
+                Applicants for {selectedJob.title}
+              </h2>
+              <div className="mb-4">
+                <ul>
+                  <li className="flex justify-between items-center mb-4">
+                    <div className="flex items-center">
+                      <img
+                        src="https://randomuser.me/api/portraits/men/1.jpg"
+                        alt="Applicant"
+                        className="w-10 h-10 rounded-full mr-4"
+                      />
+                      <div>
+                        <p className="text-lg font-semibold">Jane Smith</p>
+                        <p className="text-gray-500">Software Engineer</p>
+                      </div>
+                    </div>
+                    <button className="bg-blue-500 text-white p-2 rounded-lg">View Profile</button>
+                  </li>
+                  <li className="flex justify-between items-center mb-4">
+                    <div className="flex items-center">
+                      <img
+                        src="https://randomuser.me/api/portraits/women/1.jpg"
+                        alt="Applicant"
+                        className="w-10 h-10 rounded-full mr-4"
+                      />
+                      <div>
+                        <p className="text-lg font-semibold">Alice Johnson</p>
+                        <p className="text-gray-500">Product Manager</p>
+                      </div>
+                    </div>
+                    <button className="bg-blue-500 text-white p-2 rounded-lg">View Profile</button>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="flex justify-center">
+                <button
+                  onClick={() => setSelectedJob(null)}
+                  className="bg-gray-500 text-white p-3 rounded-lg hover:bg-gray-600 transition duration-300 ease-in-out"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Post Job Modal */}
+        {showPostJobModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+            <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
+              <h2 className="text-2xl font-semibold mb-4 text-center">Post a New Job</h2>
+              <form>
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Job Title</label>
+                  <input
+                    type="text"
+                    placeholder="Enter job title"
+                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Company</label>
+                  <input
+                    type="text"
+                    placeholder="Enter company name"
+                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium mb-2">Location</label>
+                  <input
+                    type="text"
+                    placeholder="Enter job location"
+                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm"
+                  />
+                </div>
+
+                <div className="mb-6">
+                  <label className="block text-sm font-medium mb-2">Job Description</label>
+                  <textarea
+                    rows="5"
+                    placeholder="Enter job description"
+                    className="w-full p-3 border border-gray-300 rounded-lg shadow-sm"
+                  />
+                </div>
+
+                <div className="flex justify-center gap-4">
+                  <button
+                    onClick={handlePostJobModal}
+                    className="bg-gray-500 text-white p-3 rounded-lg hover:bg-gray-600 transition duration-300 ease-in-out"
+                  >
+                    Close
+                  </button>
+                  <button className="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600 transition duration-300 ease-in-out">
+                    Post Job
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
-
-      {/* Post Job Modal */}
-      {isPostJobModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg w-96">
-            <h3 className="text-2xl font-semibold mb-4">Post a New Job</h3>
-            <form>
-              <div className="mb-4">
-                <label className="block text-gray-700">Job Title</label>
-                <input type="text" className="w-full p-2 border rounded-lg" placeholder="Job Title" />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Job Description</label>
-                <textarea className="w-full p-2 border rounded-lg" placeholder="Job Description"></textarea>
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Location</label>
-                <input type="text" className="w-full p-2 border rounded-lg" placeholder="Location" />
-              </div>
-              <div className="flex justify-end">
-                <button type="button" onClick={togglePostJobModal} className="bg-red-500 text-white px-4 py-2 rounded-lg mr-4">Cancel</button>
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-lg">Post Job</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* View Applications Modal */}
-      {isViewApplicationsModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-8 rounded-lg w-96">
-            <h3 className="text-2xl font-semibold mb-4">Applications</h3>
-            <ul className="mb-4">
-              {applications.map((app) => (
-                <li key={app.id} className="border-b py-2">
-                  <div className="flex justify-between">
-                    <p className="font-medium">{app.name}</p>
-                    <p className="text-gray-600">{app.position}</p>
-                  </div>
-                  <p className="text-sm text-gray-500">Status: {app.status}</p>
-                </li>
-              ))}
-            </ul>
-            <div className="flex justify-end">
-              <button type="button" onClick={toggleViewApplicationsModal} className="bg-red-500 text-white px-4 py-2 rounded-lg">Close</button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

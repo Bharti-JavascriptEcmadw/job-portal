@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
 import JobSeekerDashboard from "./components/JobSeekerDashboard";
 import HiringManagerDashboard from "./components/HiringManagerDashboard";
 import RecruiterDashboard from "./components/RecruiterDashboard";
@@ -12,7 +11,6 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        {/* <Navbar /> */}
         <Routes>
           {/* Login Route */}
           <Route path="/" element={<LoginPage setUserRole={setUserRole} />} />

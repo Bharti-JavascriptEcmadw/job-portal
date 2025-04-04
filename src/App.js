@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import JobSeekerDashboard from "./components/JobSeekerDashboard";
+import HiringManagerDashboard from "./components/HiringManagerDashboard";
+import RecruiterDashboard from "./components/RecruiterDashboard";
+import LoginPage from "./components/LoginPage";
 
 function App() {
+  const [userRole, setUserRole] = useState(null); // Store user role state
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        {/* <Navbar /> */}
+        <Routes>
+          {/* Login Route */}
+          <Route path="/" element={<LoginPage setUserRole={setUserRole} />} />
+          
+          {/* Conditionally render the routes based on userRole */}
+          {userRole && (
+            <>
+              <Route path="/job-seeker" element={<JobSeekerDashboard />} />
+              <Route path="/hiring-manager" element={<HiringManagerDashboard />} />
+              <Route path="/recruiter" element={<RecruiterDashboard />} />
+            </>
+          )}
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

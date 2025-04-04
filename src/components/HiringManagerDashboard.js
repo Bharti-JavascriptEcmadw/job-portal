@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";  // Import useNavigate from reac
 const HiringManagerDashboard = () => {
     const navigate = useNavigate();
   
-  // Dummy data for job postings and applicants (in a real-world scenario, this will be fetched from an API)
   const jobs = [
     {
       id: 1,
